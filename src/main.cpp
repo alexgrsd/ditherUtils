@@ -1,5 +1,5 @@
 #include <iostream>
-#include "mask.hpp"
+#include "engine/masking/mask.hpp"
 
 int main ()
 {
