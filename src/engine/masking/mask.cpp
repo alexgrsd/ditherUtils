@@ -12,13 +12,17 @@ int** createMask(const cv::Mat& image) {
     return mask;
 }
 
-int** createMaskLowRes(const cv::Mat& image, int cell_size, int threshold) { // create a low res mask based on cell size
-    // resize to low resolution
-    int low_res_rows = image.rows / cell_size;
-    int low_res_cols = image.cols / cell_size;
+int** createMaskLowRes(const cv::Mat& image, int cell_size, int threshold) {
+    cv::Mat gray;
+    if (image.channels() == 3) cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
+    else gray = image;
+
+    int low_res_rows = gray.rows / cell_size;
+    int low_res_cols = gray.cols / cell_size;
+
     cv::Mat low_res_image;
-    cv::resize(image, low_res_image, cv::Size(low_res_cols, low_res_rows), 0, 0, cv::INTER_AREA);
-    // create mask based on low res image
+    cv::resize(gray, low_res_image, cv::Size(low_res_cols, low_res_rows), 0, 0, cv::INTER_AREA);
+
     int** mask = new int*[low_res_rows];
     for (int i = 0; i < low_res_rows; ++i) {
         mask[i] = new int[low_res_cols];
